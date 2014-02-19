@@ -87,29 +87,29 @@ package starling.text
         private static var sDefaultTextureFormat:String =
             "BGRA_PACKED" in Context3DTextureFormat ? "bgraPacked4444" : "bgra";
 
-        private var mFontSize:Number;
-        private var mColor:uint;
-        private var mText:String;
-        private var mFontName:String;
-        private var mHAlign:String;
-        private var mVAlign:String;
-        private var mBold:Boolean;
-        private var mItalic:Boolean;
-        private var mUnderline:Boolean;
-        private var mAutoScale:Boolean;
-        private var mAutoSize:String;
-        private var mKerning:Boolean;
-        private var mNativeFilters:Array;
-        private var mRequiresRedraw:Boolean;
-        private var mIsRenderedText:Boolean;
-        private var mTextBounds:Rectangle;
-        private var mBatchable:Boolean;
+        protected var mFontSize:Number;
+        protected var mColor:uint;
+        protected var mText:String;
+        protected var mFontName:String;
+        protected var mHAlign:String;
+        protected var mVAlign:String;
+        protected var mBold:Boolean;
+        protected var mItalic:Boolean;
+        protected var mUnderline:Boolean;
+        protected var mAutoScale:Boolean;
+        protected var mAutoSize:String;
+        protected var mKerning:Boolean;
+        protected var mNativeFilters:Array;
+        protected var mRequiresRedraw:Boolean;
+        protected var mIsRenderedText:Boolean;
+        protected var mTextBounds:Rectangle;
+        protected var mBatchable:Boolean;
         
-        private var mHitArea:DisplayObject;
-        private var mBorder:DisplayObjectContainer;
+        protected var mHitArea:DisplayObject;
+        protected var mBorder:DisplayObjectContainer;
         
-        private var mImage:Image;
-        private var mQuadBatch:QuadBatch;
+        protected var mImage:Image;
+        protected var mQuadBatch:QuadBatch;
         
         // this object will be used for text rendering
         private static var sNativeTextField:flash.text.TextField = new flash.text.TextField();
@@ -381,7 +381,7 @@ package starling.text
         
         // bitmap font composition
         
-        private function createComposedContents():void
+        protected function createComposedContents():void
         {
             if (mImage) 
             {
@@ -464,13 +464,13 @@ package starling.text
         
         // properties
         
-        private function get isHorizontalAutoSize():Boolean
+        protected function get isHorizontalAutoSize():Boolean
         {
             return mAutoSize == TextFieldAutoSize.HORIZONTAL || 
                    mAutoSize == TextFieldAutoSize.BOTH_DIRECTIONS;
         }
         
-        private function get isVerticalAutoSize():Boolean
+        protected function get isVerticalAutoSize():Boolean
         {
             return mAutoSize == TextFieldAutoSize.VERTICAL || 
                    mAutoSize == TextFieldAutoSize.BOTH_DIRECTIONS;

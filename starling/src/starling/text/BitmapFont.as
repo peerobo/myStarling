@@ -60,21 +60,21 @@ package starling.text
         /** The font name of the embedded minimal bitmap font. Use this e.g. for debug output. */
         public static const MINI:String = "mini";
         
-        private static const CHAR_SPACE:int           = 32;
-        private static const CHAR_TAB:int             =  9;
-        private static const CHAR_NEWLINE:int         = 10;
-        private static const CHAR_CARRIAGE_RETURN:int = 13;
+        protected static const CHAR_SPACE:int           = 32;
+        protected static const CHAR_TAB:int             =  9;
+        protected static const CHAR_NEWLINE:int         = 10;
+        protected static const CHAR_CARRIAGE_RETURN:int = 13;
         
-        private var mTexture:Texture;
-        private var mChars:Dictionary;
-        private var mName:String;
-        private var mSize:Number;
-        private var mLineHeight:Number;
-        private var mBaseline:Number;
-        private var mOffsetX:Number;
-        private var mOffsetY:Number;
-        private var mHelperImage:Image;
-        private var mCharLocationPool:Vector.<CharLocation>;
+        protected var mTexture:Texture;
+        protected var mChars:Dictionary;
+        protected var mName:String;
+        protected var mSize:Number;
+        protected var mLineHeight:Number;
+        protected var mBaseline:Number;
+        protected var mOffsetX:Number;
+        protected var mOffsetY:Number;
+        protected var mHelperImage:Image;
+        protected var mCharLocationPool:Vector.<CharLocation>;
         
         /** Creates a bitmap font by parsing an XML file and uses the specified texture. 
          *  If you don't pass any data, the "mini" font will be created. */
@@ -218,7 +218,7 @@ package starling.text
         
         /** Arranges the characters of a text inside a rectangle, adhering to the given settings. 
          *  Returns a Vector of CharLocations. */
-        private function arrangeChars(width:Number, height:Number, text:String, fontSize:Number=-1,
+        protected function arrangeChars(width:Number, height:Number, text:String, fontSize:Number=-1,
                                       hAlign:String="center", vAlign:String="center",
                                       autoScale:Boolean=true, kerning:Boolean=true):Vector.<CharLocation>
         {
@@ -407,20 +407,5 @@ package starling.text
          *  Useful to make up for incorrect font data. @default 0. */
         public function get offsetY():Number { return mOffsetY; }
         public function set offsetY(value:Number):void { mOffsetY = value; }
-    }
-}
-
-import starling.text.BitmapChar;
-
-class CharLocation
-{
-    public var char:BitmapChar;
-    public var scale:Number;
-    public var x:Number;
-    public var y:Number;
-    
-    public function CharLocation(char:BitmapChar)
-    {
-        this.char = char;
     }
 }

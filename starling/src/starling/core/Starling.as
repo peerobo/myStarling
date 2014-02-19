@@ -186,7 +186,7 @@ package starling.core
         private var mRootClass:Class;
         private var mRoot:DisplayObject;
         private var mJuggler:Juggler;
-        private var mSupport:RenderSupport;
+        public var mSupport:RenderSupport;
         private var mTouchProcessor:TouchProcessor;
         private var mAntiAliasing:int;
         private var mSimulateMultitouch:Boolean;
