@@ -768,7 +768,7 @@ package starling.utils
             
             if (rawAsset is Class)
             {
-                setTimeout(onComplete, 1, new rawAsset());
+                setTimeout(complete, 1, new rawAsset());
             }
             else if (rawAsset is String)
             {
@@ -786,7 +786,7 @@ package starling.utils
             function onIoError(event:IOErrorEvent):void
             {
                 log("IO error: " + event.text);
-                onComplete(null);
+                complete(null);
             }
             
             function onLoadProgress(event:ProgressEvent):void
@@ -810,7 +810,7 @@ package starling.utils
                         sound = new Sound();
                         sound.loadCompressedDataFromByteArray(bytes, bytes.length);
                         bytes.clear();
-                        onComplete(sound);
+                        complete(sound);
                         break;
                     case "jpg":
                     case "jpeg":
@@ -823,7 +823,7 @@ package starling.utils
                         loader.loadBytes(bytes, loaderContext);
                         break;
                     default: // any XML / JSON / binary data 
-                        onComplete(bytes);
+                        complete(bytes);
                         break;
                 }
             }
@@ -832,7 +832,18 @@ package starling.utils
             {
                 urlLoader.data.clear();
                 event.target.removeEventListener(Event.COMPLETE, onLoaderComplete);
-                onComplete(event.target.content);
+                complete(event.target.content);
+            }
+            
+            function complete(asset:Object):void
+            {
+                // On mobile, it is not allowed / endorsed to make stage3D calls while the app
+                // is in the background. Thus, we pause queue processing if that's the case.
+                
+                if (SystemUtil.isDesktop)
+                    onComplete(asset);
+                else
+                    SystemUtil.executeWhenApplicationIsActive(onComplete, asset);
             }
         }
         
