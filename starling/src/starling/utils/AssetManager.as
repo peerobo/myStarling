@@ -1,6 +1,7 @@
 package starling.utils
 {	
-	import com.fc.air.base.BFConstructor;
+	//import com.fc.air.base.BFConstructor;
+	import base.BFConstructor;
     import flash.display.Bitmap;
     import flash.display.Loader;
     import flash.events.IOErrorEvent;

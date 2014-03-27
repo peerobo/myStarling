@@ -577,10 +577,10 @@ package starling.display
                     quadBatch.addQuad(quad, alpha, texture, smoothing, transformationMatrix, blendMode);
                 else
                     quadBatch.addQuadBatch(batch, alpha, transformationMatrix, blendMode);
-            }
+            }			
             else
             {
-                throw new Error("Unsupported display object: " + getQualifiedClassName(object));
+                //throw new Error("Unsupported display object: " + getQualifiedClassName(object));
             }
             
             if (isRootObject)
