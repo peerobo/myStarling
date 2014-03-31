@@ -580,7 +580,7 @@ package starling.display
             }			
             else
             {
-                //throw new Error("Unsupported display object: " + getQualifiedClassName(object));
+                throw new Error("Unsupported display object: " + getQualifiedClassName(object));
             }
             
             if (isRootObject)
