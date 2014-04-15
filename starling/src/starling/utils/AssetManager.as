@@ -67,12 +67,15 @@ package starling.utils
      */
     public class AssetManager extends EventDispatcher
     {
-        private var mDefaultTextureOptions:TextureOptions;
-        private var mCheckPolicyFile:Boolean;
-        private var mVerbose:Boolean;
+        private var mStarling:Starling;
         private var mNumLostTextures:int;
         private var mNumRestoredTextures:int;
-        private var mStarling:Starling;
+
+        private var mDefaultTextureOptions:TextureOptions;
+        private var mCheckPolicyFile:Boolean;
+        private var mKeepAtlasXmls:Boolean;
+        private var mKeepFontXmls:Boolean;
+        private var mVerbose:Boolean;
         
         private var mQueue:Array;
         private var mIsLoading:Boolean;
@@ -93,14 +96,13 @@ package starling.utils
         public function AssetManager(scaleFactor:Number=1, useMipmaps:Boolean=false)
         {
             mDefaultTextureOptions = new TextureOptions(scaleFactor, useMipmaps);
-            mVerbose = mCheckPolicyFile = mIsLoading = false;
-            mQueue = [];
             mTextures = new Dictionary();
             mAtlases = new Dictionary();
             mSounds = new Dictionary();
             mXmls = new Dictionary();
             mObjects = new Dictionary();
             mByteArrays = new Dictionary();
+            mQueue = [];
         }
         
         /** Disposes all contained textures. */
@@ -589,7 +591,9 @@ package starling.utils
                         if (texture)
                         {
                             addTextureAtlas(name, new TextureAtlas(texture, xml));
-                            removeTexture(name, false);
+
+                            if (mKeepAtlasXmls) addXml(name, xml);
+                            else System.disposeXML(xml);
                         }
                         else log("Cannot create atlas: texture '" + name + "' is missing.");
                     }
@@ -610,8 +614,6 @@ package starling.utils
                     }
                     else
                         throw new Error("XML contents not recognized: " + rootNode);
-                    
-                    System.disposeXML(xml);
                 }
             }
             
@@ -766,6 +768,7 @@ package starling.utils
         {
             var extension:String = null;
             var urlLoader:URLLoader = null;
+            var url:String = null;
             
             if (rawAsset is Class)
             {
@@ -773,7 +776,7 @@ package starling.utils
             }
             else if (rawAsset is String)
             {
-                var url:String = rawAsset as String;
+                url = rawAsset as String;
                 extension = url.split("?")[0].split(".").pop().toLowerCase();
                 
                 urlLoader = new URLLoader();
@@ -798,7 +801,7 @@ package starling.utils
             
             function onUrlLoaderComplete(event:Object):void
             {
-                var bytes:ByteArray = urlLoader.data as ByteArray;
+                var bytes:ByteArray = transformData(urlLoader.data as ByteArray, url);
                 var sound:Sound;
                 
                 urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, onIoError);
@@ -875,7 +878,15 @@ package starling.utils
                 throw new ArgumentError("Cannot extract names for objects of type '" + name + "'");
             }
         }
-        
+
+        /** This method is called when raw byte data has been loaded from an URL or a file.
+         *  Override it to process the downloaded data in some way (e.g. decompression) or
+         *  to cache it on disk. */
+        protected function transformData(data:ByteArray, url:String):ByteArray
+        {
+            return data;
+        }
+
         /** This method is called during loading of assets when 'verbose' is activated. Per
          *  default, it traces 'message' to the console. */
         protected function log(message:String):void
@@ -961,5 +972,17 @@ package starling.utils
          *  in the 'flash.system.LoaderContext' documentation. */
         public function get checkPolicyFile():Boolean { return mCheckPolicyFile; }
         public function set checkPolicyFile(value:Boolean):void { mCheckPolicyFile = value; }
+
+        /** Indicates if atlas XML data should be stored for access via the 'getXml' method.
+         *  If true, you can access an XML under the same name as the atlas.
+         *  If false, XMLs will be disposed when the atlas was created. @default false. */
+        public function get keepAtlasXmls():Boolean { return mKeepAtlasXmls; }
+        public function set keepAtlasXmls(value:Boolean):void { mKeepAtlasXmls = value; }
+
+        /** Indicates if bitmap font XML data should be stored for access via the 'getXml' method.
+         *  If true, you can access an XML under the same name as the bitmap font.
+         *  If false, XMLs will be disposed when the font was created. @default false. */
+        public function get keepFontXmls():Boolean { return mKeepFontXmls; }
+        public function set keepFontXmls(value:Boolean):void { mKeepFontXmls = value; }
     }
 }
